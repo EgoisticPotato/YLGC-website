@@ -22,8 +22,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/egoisticpotato/ylgc .
+          docker build -t ghcr.io/egoisticpotato/ylgc-website .
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/egoisticpotato/ylgc
+          docker push ghcr.io/egoisticpotato/ylgc-website
