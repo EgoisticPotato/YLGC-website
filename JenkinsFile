@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+
+  environment {
+    IMAGE = "ghcr.io/egoisticpotato/ylgc:latest"
+  }
+
+  stages {
+    stage('Login to GHCR') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'ghcr-creds', usernameVariable: 'egoistic', passwordVariable: 'egoistic')]) {
+          sh '''
+            echo "$egoistic" | docker login ghcr.io -u "$egoistic" --password-stdin
+          '''
+        }
+      }
+    }
+
+    stage('Deploy Locally') {
+      steps {
+        sh '''
+          docker pull ${IMAGE}
+          docker stop ylgc || true
+          docker rm ylgc || true
+          docker run -d --name ylgc -p 80:4173 --restart unless-stopped ${IMAGE}
+        '''
+      }
+    }
+  }
+}
